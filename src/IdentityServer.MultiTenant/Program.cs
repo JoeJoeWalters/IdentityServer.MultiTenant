@@ -1,11 +1,11 @@
 using Finbuckle.MultiTenant;
+using IdentityServer.MultiTenant.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-//builder.Services.AddDbContext<ApplicationDbContext>();
+builder.Services.AddDbContext<ApplicationDbContext>();
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddControllers();
@@ -21,14 +21,12 @@ builder.Services.AddMultiTenant<TenantInfo>()
 var app = builder.Build();
 
 // Apply migrations if needed
-/*
 var store = app.Services.GetRequiredService<IMultiTenantStore<TenantInfo>>();
 foreach (var tenant in await store.GetAllAsync())
 {
     await using var db = new ApplicationDbContext(tenant);
     await db.Database.MigrateAsync();
 }
-*/
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
