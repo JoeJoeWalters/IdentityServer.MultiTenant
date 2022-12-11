@@ -1,7 +1,7 @@
 using Finbuckle.MultiTenant;
+using IdentityServer.MultiTenant;
 using IdentityServer.MultiTenant.Data;
 using IdentityServer.MultiTenant.OpenApi;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +18,14 @@ builder.Services.AddSwaggerGen(c => c.OperationFilter<AddRequiredHeaderParameter
 builder.Services.AddMultiTenant<TenantInfo>()
                 .WithHeaderStrategy("TenantKey")
                 .WithConfigurationStore();
+
+// Add in Identity Server
+builder.Services.AddIdentityServer(c => 
+        {
+        })
+    .AddInMemoryApiScopes(Config.ApiScopes)
+    .AddInMemoryClients(Config.Clients)
+    .AddDefaultEndpoints();
 
 var app = builder.Build();
 
@@ -40,6 +48,7 @@ if (app.Environment.IsDevelopment())
 
 // Must come before UseEndpoints (or equiv)
 app.UseMultiTenant();
+app.UseIdentityServer();
 
 app.UseHttpsRedirection();
 

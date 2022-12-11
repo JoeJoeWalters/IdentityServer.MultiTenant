@@ -12,6 +12,8 @@ namespace IdentityServer.MultiTenant.OpenApi
             if (operation.Parameters == null)
                 operation.Parameters = new List<OpenApiParameter>();
 
+            // Add Tenant Key parameter so users have to provide the key to access the
+            // appropriate tenant partition
             operation.Parameters.Add(new OpenApiParameter
             {
                 Name = "TenantKey",
