@@ -2,11 +2,12 @@ using Finbuckle.MultiTenant;
 using IdentityServer.MultiTenant;
 using IdentityServer.MultiTenant.Data;
 using IdentityServer.MultiTenant.OpenApi;
+using Duende.IdentityServer.EntityFramework;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<ApplicationDbContext>();
+builder.Services.AddDbContext<MultiConfigurationDbContext>(options => { });
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddControllers();
@@ -20,9 +21,10 @@ builder.Services.AddMultiTenant<TenantInfo>()
                 .WithConfigurationStore();
 
 // Add in Identity Server
-builder.Services.AddIdentityServer(c => 
+builder.Services.AddIdentityServer(c =>
         {
         })
+    .AddConfigurationStore<MultiConfigurationDbContext>()
     .AddInMemoryApiScopes(Config.ApiScopes)
     .AddInMemoryClients(Config.Clients)
     .AddDefaultEndpoints();
